@@ -38,6 +38,7 @@ def save_benchmark(benchmark_id,  data):
             benchmark = benchmark_models.Benchmark.objects.select_for_update().get(id=benchmark_id)
             logger.info('Saving benchmark')
             benchmark.save_item(benchmark_data)
+            benchmark.upload_completed = True
             benchmark.save()
         return
     benchmark_data = etree.parse(data).getroot()
