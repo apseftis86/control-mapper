@@ -60,8 +60,6 @@ class Benchmark(CustomModel):
     def save_item(self, element, **kwargs):
         text_attributes = ['title', 'description', 'version', 'status']
         # get identifier of benchmark for save
-        self.identifier = element.get('id')
-        self.save()
         profiles = []
         for child in element.getchildren():
             tag = etree.QName(child).localname

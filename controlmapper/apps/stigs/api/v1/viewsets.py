@@ -19,7 +19,7 @@ def allowed_file(filename):
 
 class BenchmarkViewSet(STIGViewSet):
     model = benchmark_models.Benchmark
-    queryset = model.objects.filter(upload_completed=True).order_by('identifier')
+    queryset = model.objects.order_by('identifier')
     serializer_class = stig_serializer.BenchmarkSerializer
     serializer_detail_class = stig_serializer.BenchmarkDetailSerializer
 

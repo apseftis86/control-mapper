@@ -1,13 +1,17 @@
 version: '3'
 
 services:
-  frontend:
-    container_name: frontend
-    build: ./frontend/
+  db:
+    image: postgres:13.3-alpine
+    container_name: db
+    hostname: db
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - 8000:80
+      - ./.db_data:/var/lib/postgresql/data
+      - ./controlmapper/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    environment:
+      - POSTGRES_DB=controlmap
+      - POSTGRES_USER=mapuser
+      - POSTGRES_PASSWORD=GOmap2021!!
   api:
     build: ./controlmapper/
     container_name: django
@@ -24,17 +28,19 @@ services:
       - ./controlmapper:/app
     depends_on:
       - db
-  db:
-    image: postgres:13.3-alpine
-    container_name: db
-    hostname: db
-    volumes:
-      - ./.db_data:/var/lib/postgresql/data
-      - ./controlmapper/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+  rabbit:
+    image: rabbitmq:3.8-management
+    container_name: rabbit
+    hostname: rabbit
     environment:
-      - POSTGRES_DB=controlmap
-      - POSTGRES_USER=mapuser
-      - POSTGRES_PASSWORD=GOmap2021!!
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=GOmap2021!!
+      - RABBITMQ_DEFAULT_VHOST=/
+    ports:
+      - "5682:5672"
+      - "15682:15672"
+    depends_on:
+      - api
   # must include celery info in the __init__.py file of ./project_root/project
   celery:
     build: ./controlmapper/
@@ -59,14 +65,15 @@ services:
       - db
       - rabbit
       - api
-  rabbit:
-    image: rabbitmq:3.8-management
-    container_name: rabbit
-    hostname: rabbit
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=GOmap2021!!
-      - RABBITMQ_DEFAULT_VHOST=/
+  frontend:
+    container_name: frontend
+    build: ./frontend/
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "5682:5672"
-      - "15682:15672"
+      - 8000:80
+    depends_on:
+      - api
+      - celery
+      - rabbit
+      - db

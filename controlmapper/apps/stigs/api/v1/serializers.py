@@ -145,7 +145,7 @@ class BenchmarkDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = benchmark_models.Benchmark
         fields = ('id', 'identifier', 'title',
-                  'status',
+                  'status', 'upload_completed',
                   'rules', 'description', 'version', 'release_info', 'profiles')
 
     @staticmethod

@@ -5,3 +5,5 @@
 *.pyc
 media/
 static/
+/controlmapper/apps/rmf/migrations/*.py
+/controlmapper/apps/stigs/migrations/*.py

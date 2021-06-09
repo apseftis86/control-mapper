@@ -37,6 +37,8 @@ def save_benchmark(benchmark_id,  data):
         with transaction.atomic():
             benchmark = benchmark_models.Benchmark.objects.select_for_update().get(id=benchmark_id)
             logger.info('Saving benchmark')
+            benchmark.identifier = benchmark_data.get('id')
+            benchmark.save()
             benchmark.save_item(benchmark_data)
             benchmark.upload_completed = True
             benchmark.save()

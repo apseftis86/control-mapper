@@ -16,6 +16,9 @@
           <mat-header-cell class="fw-40 pr-1" *matHeaderCellDef mat-sort-header> Identifier </mat-header-cell>
           <mat-cell *matCellDef="let element" class="fw-40 pr-1">
             {{element.identifier}}
+            <ng-container *ngIf="!element.upload_completed">
+              <mat-icon>schedule</mat-icon>
+            </ng-container>
           </mat-cell>
         </ng-container>
         <ng-container *ngSwitchDefault>
@@ -54,13 +57,13 @@
     <ng-container matColumnDef="version">
       <mat-header-cell class="fw-5" *matHeaderCellDef mat-sort-header> Version </mat-header-cell>
       <mat-cell *matCellDef="let element" class="fw-5">
-        {{element.version}}
+        {{element.version || 'unknown'}}
       </mat-cell>
     </ng-container>
     <ng-container matColumnDef="release_info">
       <mat-header-cell class="fw-25" *matHeaderCellDef mat-sort-header> Release Info </mat-header-cell>
       <mat-cell *matCellDef="let element" class="fw-25">
-        {{element.release_info}}
+        {{element.release_info || 'unknown'}}
       </mat-cell>
     </ng-container>
 
