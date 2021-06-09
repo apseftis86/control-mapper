@@ -1,0 +1,5 @@
+/controlmapper/apps/rmf/fixtures/
+/frontend/control-map/node_modules/
+*.pyc
+media/
+static/

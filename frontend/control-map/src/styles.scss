@@ -1,0 +1,348 @@
+/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  src: url('assets/Roboto/roboto.eot'); /* IE9 Compat Modes */
+  src: url('assets/Roboto/roboto.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('assets/Roboto/Roboto-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Roboto-Medium';
+  font-style: normal;
+  src: url('assets/Roboto/roboto.eot'); /* IE9 Compat Modes */
+  src: url('assets/Roboto/roboto.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('assets/Roboto/Roboto-Medium.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+@font-face {
+  font-family: 'Roboto-Light-Italic';
+  font-style: normal;
+  src: url('assets/Roboto/roboto.eot'); /* IE9 Compat Modes */
+  src: url('assets/Roboto/roboto.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('assets/Roboto/Roboto-LightItalic.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
+/* set these up as classes so they can be extended per use case in application */
+
+.medium-font {
+  font-family: 'Roboto-Medium', 'Helvetica Neue', sans-serif !important;
+}
+.light-italic {
+  font-family: 'Roboto-Light-Italic', 'Helvetica Neue', sans-serif !important;
+}
+body {
+  background-color: #f3f3f36e !important;
+}
+html, body { height: 100%; }
+h1, h2, h3, h4, h5, h6 {
+  @extend .medium-font;
+  line-height: 1.5 !important;
+}
+b, strong, mat-header-cell, .mat-tab-label-content {
+  @extend .medium-font;
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif}
+.flex-spacer {flex: 1 1 auto}
+main {margin: 0 auto 10px auto }  .login-space {flex: 1 1 auto}
+.clickable{cursor: pointer !important;}
+mat-card {
+  padding: 0 !important;
+  height: 100%;
+}.mat-sort-header-button {
+   outline: none !important;
+ }
+.mat-button-wrapper {
+  @extend .medium-font;
+}
+mat-card-title {
+  @extend .medium-font;
+  margin-bottom: 0 !important;
+  font-size: 16px !important;
+}
+mat-list {
+  overflow-x: hidden;
+}
+mat-card-content {
+  padding: 5px 24px;
+}
+mat-list-item[empty] {
+  @extend .light-italic;
+  color: #6c757d!important;
+}
+mat-dialog-actions {
+  padding-bottom: 2rem !important;
+  padding-right: 1.25rem !important;
+}
+.outline-none {
+  outline: none !important;
+}
+.custom-padding {
+  & .mat-list-item-content {
+    padding: 0 !important;
+  }
+}
+.skinny-title {
+  padding: 0.75rem !important;
+  min-height: 52px !important;
+}
+.condensed  {
+  .mat-list-item {
+    height: 45px !important;
+    font-size: 14px !important;
+  }
+}
+.clear-header {
+  margin-top: 8% !important;
+}
+.mat-divider {
+  display: block;
+  margin: 0;
+  border-top-width: 2px;
+  border-top-style: solid;
+}
+.hide {
+  display: none;
+}
+mat-footer-cell[empty] {
+  font-style: italic;
+  justify-content: center;
+  color: #6c757d;
+}
+.text-critical {
+  color: darkorange;
+}
+.bg-high {
+  background-color: darkorange !important;
+}
+.hover:hover {
+  &:not(.bg-whitesmoke) {
+    background-color: whitesmoke !important;
+  }
+  &.bg-whitesmoke {
+    background-color: #0000002b !important;
+  }
+}
+.detail-card {
+  width: 250px;
+}
+.results {
+  color: white;
+  font-weight: bold;
+  & span {
+    &.compliance_result {
+      padding: 9px;
+    }
+    &:not(.compliance_result) {
+      padding: 6px;
+    }
+    text-align: center;
+    cursor: pointer;
+    &:hover{
+      opacity: 0.9;
+    }
+  }
+}
+.mat-list-item-content > a {
+  color: inherit;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+.delete-icon, .hover-larger { transition: all .2s ease-in-out; cursor: pointer}
+.delete-icon:hover, .hover-larger:hover { transform: scale(1.2)}
+.mat-grid-tile .mat-figure {
+  display: block !important;
+}
+.mat-list-base {
+  padding-top: 0 !important;
+}
+.mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content {
+  min-height: 44px !important;
+}
+.mat-list-base .mat-list-item, .mat-list-base .mat-list-option {
+  height: auto !important;
+}
+.id-cell {
+  min-width: 75px !important;
+}
+.xs-cell {
+  flex: 0 0 15% !important;
+  min-width: 75px !important;
+}
+.small-cell {
+  flex: 0 0 20% !important;
+  min-width: 150px !important;
+  padding: 5px;
+}
+.md-cell {
+  flex: 0 0 30% !important;
+  min-width: 150px !important;
+  padding: 5px;
+}
+.lg-cell {
+  flex: 0 0 50% !important;
+  min-width: 300px !important;
+  padding: 5px;
+}
+.actions-cell {
+  flex: 0 0 10% !important;
+  min-width: 100px !important;
+}
+.bg-whitesmoke {
+  background-color: whitesmoke !important;
+}
+.mat-dialog-container {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+.mat-dialog-content {
+  overflow: hidden !important;
+  max-height: 100vh !important;
+}
+.v-align-middle {
+  vertical-align: middle !important;
+}
+.no-padding {
+  .mat-list-item-content {
+    padding: 0 !important;
+  }
+}
+// this mimicks the 'small' class
+.medium {
+  font-size: 95% !important;
+  font-weight: 400 !important;
+}
+mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
+  padding-left: 18px !important;
+}
+.no-shadow {
+  box-shadow: none !important;
+}
+.w-77 {
+  width: 77% !important
+}
+.w-80 {
+  width: 80% !important
+}
+.w-20 {
+  width: 20% !important
+}
+.w-5 {
+  width: 5% !important
+}
+.w-10 {
+  width: 10% !important
+}
+.w-15 {
+  width: 15% !important
+}
+.w-30 {
+  width: 30% !important
+}
+.w-90 {
+  width: 90% !important
+}
+.w-85 {
+  width: 85% !important
+}
+.w-92 {
+  width: 92% !important
+}
+.w-95 {
+  width: 95% !important
+}
+.w-98 {
+  width: 98% !important
+}
+.mat-btn-sm {
+  line-height: 20px !important;
+}
+.small-btn {
+  transform: scale(0.7) !important;
+}
+.med-btn {
+  transform: scale(0.9) !important;
+}
+.icon-larger {
+  transform: scale(1.5)
+}
+.svg-icon-larger {
+  transform: scale(1.4)
+}
+.mat-tab-body-content {
+  padding: 2px;
+  min-height: 150px !important;
+}
+.line-break {
+  white-space: pre-line;
+}
+.badge-purple {
+  color: white;
+  background-color: #603292;
+}
+.mat-form-field-infix {
+  padding-top: .75em !important;
+}
+.mat-tooltip {
+  font-size: 14px !important;
+  white-space: pre-line !important;
+}
+.line-height-1 {
+  line-height: 1 !important;
+}
+// flex widths for tables
+.fw-5 {
+  flex: 1 0 5%;
+}
+.fw-10 {
+  flex: 1 0 10%;
+}
+.fw-15 {
+  flex: 1 0 15%;
+}
+.fw-20 {
+  flex: 1 0 20%;
+}
+.fw-25 {
+  flex: 1 0 25%;
+}
+.fw-30 {
+  flex: 1 0 30%;
+}
+.fw-35 {
+  flex: 1 0 35%;
+}
+.fw-40 {
+  flex: 1 0 40%;
+}
+.fw-45 {
+  flex: 1 0 45%;
+}
+.fw-50 {
+  flex: 1 0 50%;
+}
+.fw-55 {
+  flex: 1 0 55%;
+}
+.fw-60 {
+  flex: 1 0 60%;
+}
+.fw-65 {
+  flex: 1 0 65%;
+}
+.fw-69 {
+  flex: 1 0 69%;
+}
+.a0 {
+  flex: 1 0 70%;
+}
+.fw-80 {
+  flex: 1 0 80%;
+}
+.fw-87 {
+  flex: 1 0 87%;
+}
+.fw-90 {
+  flex: 1 0 90%;
+}

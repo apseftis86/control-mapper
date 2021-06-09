@@ -1,0 +1,65 @@
+<!-- Default form login -->
+<div (keypress)="getKeyPress($event)" class="d-flex align-items-center mt-5">
+  <span class="flex-spacer"></span>
+  <!-- holding on to ng-container for when we switch back and forth from login and register -->
+  <mat-card class="fw-35">
+    <mat-card-content *ngIf="registerForm">
+      <mat-tab-group (selectedTabChange)="handleTabChange($event)">
+        <mat-tab label="Login">
+          <!-- since mat-dialog has no padding inside of the tab group need to pad area -->
+          <div class="p-3">
+            <mat-form-field class="d-block">
+              <input type="text" matInput [(ngModel)]="user.username" placeholder="username" name="username">
+            </mat-form-field>
+            <mat-form-field class="d-block">
+              <div class="d-flex">
+                <input [type]="showPassword? 'text' : 'password'" matInput [(ngModel)]="user.password" placeholder="password" name="password">
+                <mat-icon class="text-muted show-password" matTooltip="Show Password" (click)="toggleShowPassword()">remove_red_eye</mat-icon>
+              </div>
+            </mat-form-field>
+          </div>
+        </mat-tab>
+        <mat-tab label="Register">
+          <form class="p-3" [formGroup]="registerForm">
+            <mat-form-field class="d-block">
+              <input type="text" matInput formControlName="first_name" placeholder="first name" name="first_name">
+              <mat-error class="text-danger" *ngIf="f.first_name.errors?.required">This field is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="d-block">
+              <input type="text" matInput formControlName="last_name" placeholder="last name" name="last_name">
+              <mat-error class="text-danger" *ngIf="f.last_name.errors?.required">This field is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="d-block">
+              <input type="email" matInput formControlName="email" placeholder="email" name="email">
+              <mat-error class="text-danger" *ngIf="f.email.errors?.required">This field is required</mat-error>
+              <mat-error class="text-danger" *ngIf="f.email.errors?.email && registerForm.controls.email.value">Invalid Email format</mat-error>
+            </mat-form-field>
+            <mat-form-field class="d-block">
+              <input type="text" matInput formControlName="username" placeholder="username" name="username">
+              <mat-error class="text-danger" *ngIf="f.username.errors?.required">This field is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="d-block">
+              <input type="password" matInput formControlName="password1" placeholder="password" name="password1">
+              <mat-error class="text-danger">{{error.password1}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="d-block">
+              <div class="d-flex">
+                <input type="password" matInput formControlName="password2" placeholder="confirm password" name="password2">
+                <mat-icon *ngIf="f.password2.errors?.mustMatch" class="text-danger">clear</mat-icon>
+              </div>
+              <mat-error class="text-danger" *ngIf="f.password2.errors?.mustMatch">Passwords must match</mat-error>
+            </mat-form-field>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+    <mat-card-actions class="p-3">
+      <button mat-button color="accent" *ngIf="action === 'register'"
+              [disabled]="registerForm.invalid" (click)="register()">Register</button>
+      <button mat-button *ngIf="action === 'login'"
+              [disabled]="!user.username || !user.password"
+              color="accent" (click)="login()">Sign in</button>
+    </mat-card-actions>
+  </mat-card>
+  <span class="flex-spacer"></span>
+</div>

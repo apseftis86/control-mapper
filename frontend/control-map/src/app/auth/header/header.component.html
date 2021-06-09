@@ -1,0 +1,26 @@
+<ng-container *ngIf="authService.currentUserValue">
+  <p class="classification-banner bg-success medium-font">UNCLASSIFIED//FOR OFFICIAL USE ONLY</p>
+  <mat-toolbar class="darkest-primary">
+    <mat-list-item class="clickable app-name">
+      <a [routerLink]="['/']" class="medium-font">{{appName}}</a>
+    </mat-list-item>
+    <ng-container *ngIf="currentUser">
+      <mat-list-item class="clickable" *ngFor="let link of links">
+        <a [routerLink]="[link.route]">{{link.text}}</a>
+      </mat-list-item>
+    </ng-container>
+    <span class="flex-spacer"></span>
+    <ng-container *ngIf="currentUser">
+        <span class="mr-3 d-flex align-items-center">
+        <mat-icon class="mx-1">person</mat-icon>
+        <span class="xsmall" [matTooltipPosition]="'left'"
+              [matTooltip]="'Successful Login: ' + currentUser.last_login +
+                                           '\nLast Failed Login: ' + currentUser.failed_login">{{currentUser.username}}</span>
+      </span>
+      <button mat-button [disableRipple]="true" (click)="authService.logout()">
+        Logout
+      </button>
+    </ng-container>
+  </mat-toolbar>
+
+</ng-container>

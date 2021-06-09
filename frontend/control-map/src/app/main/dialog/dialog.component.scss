@@ -1,0 +1,115 @@
+mat-dialog-content {
+  padding: 0 40px !important;
+  &:not(.nist-item-pane) {
+    overflow-x: hidden !important;
+  }
+}
+mat-checkbox {
+  display: block;
+}
+.abs-right {
+  position: absolute;
+  right: 0 !important;
+}
+.highlight-text {
+  background-color: #ffff00 !important;
+  padding: 7px !important;
+  border-radius: 5px;
+  -webkit-box-shadow: 5px 5px 4px -1px #898989;
+  box-shadow: 2px 2px 5px -2px #898989;
+}
+.dialog-table {
+  display: block;
+  max-height: 500px !important;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.notes-pane {
+  min-height: 200px !important;
+  max-height: 500px !important;
+  overflow-y: auto;
+}
+.difference-pane {
+  min-height: 200px !important;
+  max-height: 500px !important;
+  overflow-y: auto;
+}
+.mat-dialog-title {
+  margin-bottom: 0 !important;
+  padding: 10px 15px !important;
+}
+.rule-info {
+  max-height: 600px !important;
+  display: block;
+  overflow-y: scroll;
+}
+.title-line.mat-line {
+  white-space: pre-wrap;
+}
+.mat-list-item-content {
+  width: 100% !important;
+}
+.shared-ssp {
+  padding-top: 15px;
+  padding-bottom: 10px;
+  min-height: 75px;
+}
+mat-form-field {
+  display: block;
+}
+.nist-item-pane {
+  max-height: 700px !important;
+  overflow-y: auto !important;
+}
+.item-pane {
+  display: block;
+  line-height: 2;
+  max-height: 600px !important;
+  min-height: 400px !important;
+}
+.mat-button, .mat-raised-button {
+  outline: none;
+}
+::ng-deep.mat-select-panel mat-option.mat-option {
+  height: unset;
+}
+::ng-deep.mat-option-text.mat-option-text {
+  display: flex;
+  white-space: normal;
+  line-height: 1.5;
+  padding: 10px;
+}
+.controls-list {
+  height: 250px !important;
+  overflow: auto;
+}
+.mat-form-field, .mat-radio-group {
+  display: block !important;
+}
+::ng-deep.mat-select-panel mat-option.mat-option{
+  height: unset !important;
+}
+::ng-deep.mat-autocomplete-panel mat-option.mat-option{
+  height: unset !important;
+}
+::ng-deep.mat-option-text.mat-option-text {
+  display: flex;
+  white-space: normal;
+  line-height: 1.5;
+  padding: 10px;
+}
+textarea {
+  resize: none !important;
+}
+.mat-selection-list .mat-list-option {
+  font-size: 14px !important;
+}
+.line-height-1 {
+  line-height: 1 !important;
+}
+.w-88 {
+  width: 88% !important;
+}
+.host-list {
+  max-height: 400px;
+}

@@ -1,0 +1,74 @@
+<ng-container [ngSwitch]="data.type">
+  <ng-container *ngSwitchCase="'ccis'">
+    <h5 mat-dialog-title>{{data.item.name}}</h5>
+    <mat-divider class="mb-3"></mat-divider>
+    <mat-dialog-content>
+      <div class="mb-3 d-flex">
+        <h6 class="mb-0 w-15">Type: </h6>
+        <span class="w-80">{{data.item.type || 'unknown'}}</span>
+      </div>
+      <div class="mb-3 d-flex">
+        <h6 class="mb-0 w-15">Definition: </h6>
+        <span class="w-80 line-height-1">{{data.item.definition}}</span>
+      </div>
+      <div class="mb-3 d-flex" *ngIf="data.item.implementation_guidance">
+        <h6 class="mb-0 w-15">Implementation Guidance: </h6>
+        <span class="w-80 line-height-1">{{data.item.implementation_guidance}}</span>
+      </div>
+      <div class="mb-3 d-flex" *ngIf="data.item.assessment_procedures">
+        <h6 class="mb-0 w-15">Assessment Procedures: </h6>
+        <span class="w-80 line-height-1">{{data.item.assessment_procedures}}</span>
+      </div>
+      <div class="mb-3 d-flex align-items-center" *ngIf="data.item.controls.length > 0">
+        <h6 class="mb-0 w-15">Controls: </h6>
+        <ng-container *ngFor="let control of data.item['controls']">
+          <app-compliance-reference [reference]="{name: '800-53', revision: control.revision, text: control.number}">
+          </app-compliance-reference>
+        </ng-container>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button mat-dialog-close color="accent">Close</button>
+    </mat-dialog-actions>
+  </ng-container>
+  <ng-container *ngSwitchCase="'controls'">
+    <h5 mat-dialog-title>NIST Control: {{data.item.number}}</h5>
+    <mat-divider class="mb-3"></mat-divider>
+    <mat-dialog-content class="nist-item-pane">
+      <div class="mb-3 d-flex">
+        <h6 class="mb-0 w-15" *ngIf="data.item.title">Title: </h6>
+        <span class="w-80">{{data.item.title}}</span>
+      </div>
+      <div class="mb-3 d-flex" *ngIf="data.item.description">
+        <h6 class="mb-0 w-15">Description: </h6>
+        <span class="w-80 line-height-1">{{data.item.description}}</span>
+      </div>
+      <div class="d-flex" *ngIf="data.item.statement">
+        <h6 class="mb-0 w-15">Statements: </h6>
+        <span class="w-80 line-height-1">
+        <ng-container [ngTemplateOutlet]="statements"
+                      [ngTemplateOutletContext]="{statement: data.item.statement, requested: data.item.requested_statement}"></ng-container>
+      </span>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button mat-dialog-close color="accent">Close</button>
+    </mat-dialog-actions>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    Holding
+  </ng-container>
+</ng-container>
+<ng-template #statements let-statement="statement" let-requested="requested" let-nested="nested">
+  <p class="mb-0 p-1 d-inline-block"
+     [class.highlight-text]="statement.number === requested"
+     *ngIf="statement.description"><span class="medium-font" *ngIf="nested">{{statement.number}} - </span>{{statement.description}}</p>
+  <ng-container *ngFor="let cci of statement.ccis">
+    <app-compliance-reference [reference]="{name: 'CCI', text: cci}"></app-compliance-reference>
+  </ng-container>
+  <ul>
+    <li *ngFor="let statement of statement.statements">
+      <ng-container  [ngTemplateOutlet]="statements" [ngTemplateOutletContext]="{statement: statement, requested: requested, nested: true}"></ng-container>
+    </li>
+  </ul>
+</ng-template>

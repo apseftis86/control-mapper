@@ -1,0 +1,124 @@
+  <div class="d-flex justify-content-between align-items-center">
+    <mat-form-field class="w-50 ml-3 mt-1">
+      <input matInput type="text" [placeholder]="'Search ' + placeholder" name="searchText" (keyup)="filterData($event.target.value)"/>
+    </mat-form-field>
+  </div>
+  <mat-table [dataSource]="dt" matSort #sort="matSort" [trackBy]="trackByFn">
+    <ng-container matColumnDef="id">
+      <mat-header-cell class="id-cell fw-5" *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="id-cell fw-5">
+        {{element.id}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="identifier">
+      <ng-container [ngSwitch]="endpoint">
+        <ng-container *ngSwitchCase="'benchmarks'">
+          <mat-header-cell class="fw-40 pr-1" *matHeaderCellDef mat-sort-header> Identifier </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="fw-40 pr-1">
+            {{element.identifier}}
+          </mat-cell>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <mat-header-cell class="fw-20" *matHeaderCellDef mat-sort-header> Identifier </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="fw-20">
+            {{element.identifier}}
+          </mat-cell>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <!-- CCI Table Columns-->
+    <ng-container matColumnDef="name">
+      <mat-header-cell class="fw-15" *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-15" >
+        {{element.name}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="definition">
+      <mat-header-cell class="fw-65" *matHeaderCellDef mat-sort-header> Definition </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-65">
+        {{element.definition}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="controls">
+      <mat-header-cell class="fw-20" *matHeaderCellDef mat-sort-header> Controls </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-20" (click)="$event.stopPropagation()">
+        <ng-container *ngFor="let control of element['controls']">
+          <app-compliance-reference
+            *ngIf="revision === control.revision"
+            [reference]="{name: '800-53', revision: control.revision, text: control.number}">
+          </app-compliance-reference>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+    <!-- benchmark specific items -->
+    <ng-container matColumnDef="version">
+      <mat-header-cell class="fw-5" *matHeaderCellDef mat-sort-header> Version </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-5">
+        {{element.version}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="release_info">
+      <mat-header-cell class="fw-25" *matHeaderCellDef mat-sort-header> Release Info </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-25">
+        {{element.release_info}}
+      </mat-cell>
+    </ng-container>
+
+
+    <!-- controls -->
+    <ng-container matColumnDef="control">
+      <mat-header-cell [ngClass]="endpoint === 'controls-800-171'? 'fw-30' : 'fw-10'" *matHeaderCellDef mat-sort-header> Control </mat-header-cell>
+      <mat-cell *matCellDef="let element" [ngClass]="endpoint === 'controls-800-171'? 'fw-30' : 'fw-10'">
+        {{element.control}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="number">
+      <mat-header-cell class="fw-5" *matHeaderCellDef mat-sort-header> Number </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-5">
+        {{element.number}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="family">
+      <mat-header-cell class="fw-10" *matHeaderCellDef mat-sort-header> Family </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-10">
+        {{element.family}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="description">
+      <mat-header-cell class="fw-50" *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-50">
+        <span class="p-2">{{element.description | slice:0:470}}{{element.description?.length > 470 ? '...' : ''}}</span>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="discussion">
+      <mat-header-cell class="fw-50" *matHeaderCellDef mat-sort-header> Discussion </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-50">
+        <span class="p-2">{{element.discussion | slice:0:470}}{{element.discussion.length > 470 ? '...' : ''}}</span>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="title">
+      <mat-header-cell class="fw-20" *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="fw-20">
+        {{element.title}}
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <!-- TODO: Do I want to add query params to this so we can route back to the report or the host -->
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="handleClick(row)" class="clickable hover" [class.align-items-start]="endpoint === 'checks'">
+    </mat-row>
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef empty>
+        <mat-progress-spinner mode="indeterminate" color="accent"></mat-progress-spinner>
+      </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="noData">
+      <mat-footer-cell *matFooterCellDef empty>
+        No {{placeholder}} found
+      </mat-footer-cell>
+    </ng-container> -->
+    <mat-footer-row *matFooterRowDef="['loading']" [hidden]="!loading || (loading && reloading)"></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide': !noData || (noData && loading)}"></mat-footer-row>
+  </mat-table>
+  <mat-paginator [pageSize]="defaultPagination || 10"
+                 [hidden]="!paginate"
+                 [pageSizeOptions]="pageSizeOptions" showFirstLastButtons #paginator></mat-paginator>

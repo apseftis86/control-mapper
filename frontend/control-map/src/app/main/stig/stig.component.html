@@ -1,0 +1,160 @@
+<div *ngIf="!isList; else stigList" class="p-3 container">
+  <mat-card class="w-100" *ngIf="stig; else loadingSpinner">
+    <mat-card-title-group class="border-bottom p-3 w-100 d-block">
+      <mat-card-title class="larger-title mb-1">
+        <div class=" d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">{{stig.identifier}}</h6>
+          <span class="flex-spacer"></span>
+          <div class="w-15 d-flex">
+            <span class="medium-font mr-2">Nist: </span>
+            <mat-select placeholder="Nist Revision" [(ngModel)]="nistRevision">
+              <mat-option [value]="3">rev. 3</mat-option>
+              <mat-option [value]="4">rev. 4</mat-option>
+              <mat-option [value]="5">rev. 5</mat-option>
+            </mat-select>
+          </div>
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle class="mb-1">
+        Version: {{stig.version}} {{stig.release_info}}
+      </mat-card-subtitle>
+      <mat-card-subtitle class="mb-0">
+        Status: {{stig.status}}
+      </mat-card-subtitle>
+    </mat-card-title-group>
+    <mat-card-content class="p-0">
+      <dl class="stig-dl p-3">
+        <dd class="medium-font">Title</dd>
+        <dd>{{stig.title}}</dd>
+        <dd class="medium-font">Description</dd>
+        <dd>{{stig.description}}</dd>
+        <dd class="medium-font">Profiles</dd>
+        <dd>
+          <mat-select class="w-50 my-1" placeholder="Filter By Profile"
+                      (selectionChange)="updateRules()"
+                      [(ngModel)]="selectedProfile">
+            <mat-option [value]="null"></mat-option>
+            <mat-option [value]="profile" *ngFor="let profile of stig.profiles">{{profile.identifier}}: {{profile.title}}</mat-option>
+          </mat-select>
+        </dd>
+      </dl>
+      <mat-divider class="my-2"></mat-divider>
+      <div class="p-3">
+        <h6 class="mb-2">Rules: <span class="badge badge-pill badge-secondary ml-2">{{(rules | multiFieldFilter:searchText:ruleFilters).length}}</span></h6>
+        <div class="d-flex">
+          <h6 class="mb-0">Show:</h6>
+          <mat-checkbox (change)="toggleRuleFilters('title')" [checked]="ruleFilters.has('title')" class="mx-2">Title</mat-checkbox>
+          <mat-checkbox (change)="toggleRuleFilters('description')" [checked]="ruleFilters.has('description')" class="mx-2">Description</mat-checkbox>
+          <mat-checkbox (change)="toggleRuleFilters('severity')" [checked]="ruleFilters.has('severity')" class="mx-2">Severity</mat-checkbox>
+          <mat-checkbox (change)="toggleRuleFilters('searchable_cci')" [checked]="ruleFilters.has('searchable_cci')" class="mx-2">CCIs</mat-checkbox>
+          <mat-checkbox (change)="toggleChecksFixes()" [checked]="showChecksFixes" class="mx-2">Checks and Fixes</mat-checkbox>
+        </div>
+        <mat-form-field class="w-75">
+          <input matInput type="text" [(ngModel)]="searchText" placeholder="Search Rules">
+        </mat-form-field>
+      </div>
+      <mat-list>
+        <mat-list-item class="mb-2"
+                       *ngFor="let rule of (rules | multiFieldFilter:searchText:ruleFilters)">
+          <mat-card class="w-100">
+            <mat-card-title-group class="border-bottom p-3">
+              <mat-card-title class="mb-1">
+                <span>Rule</span><span class="ml-2">{{rule.rule_id}}</span>
+              </mat-card-title>
+              <mat-card-subtitle class="mb-0">
+                <span>Vuln-ID</span><span class="ml-2">{{rule.vuln_id}}</span>
+              </mat-card-subtitle>
+            </mat-card-title-group>
+            <mat-card-content class="p-0">
+              <table class="table table-borderless">
+                <tr *ngIf="ruleFilters.has('title')">
+                  <th class="medium-font">Title</th>
+                  <td>{{rule.title}}</td>
+                </tr>
+                <tr *ngIf="ruleFilters.has('description')">
+                  <th class="medium-font">Description</th>
+                  <td>{{rule.description}}</td>
+                </tr>
+                <tr *ngIf="ruleFilters.has('severity')">
+                  <th class="medium-font">Severity</th>
+                  <td>
+                    <span class="badge badge-pill mat-elevation-z1" [ngClass]="rule.severity ? readableSeverity[rule.severity].class : 'badge-secondary'">{{rule.severity}}</span>
+                  </td>
+                </tr>
+                <tr *ngIf="ruleFilters.has('searchable_cci')">
+                  <th class="medium-font">CCIS</th>
+                  <td>
+                    <ng-container  *ngIf="rule.ccis.length > 0; else noCCIs">
+                      <p class="mb-1" *ngFor="let cci of rule.ccis">
+                        <app-compliance-reference
+                          [reference]="{name: 'CCI', text: cci.name}"></app-compliance-reference>
+                        <ng-container *ngFor="let control of cci['controls']">
+                          <app-compliance-reference *ngIf="nistRevision == control.revision"
+                            [reference]="{name: '800-53', revision: nistRevision, text: control.number}">
+                          </app-compliance-reference>
+                        </ng-container>
+                      </p>
+                    </ng-container>
+                    <ng-template #noCCIs>
+                      <span class="light-italic">No CCIS found</span>
+                    </ng-template>
+                  </td>
+                </tr>
+                <tr *ngIf="rule.check && showChecksFixes">
+                  <th class="medium-font">Check</th>
+                  <td>
+                      <div class="bg-whitesmoke border p-1 line-break mb-2">
+                        <code>{{rule.check}}</code>
+                      </div>
+                  </td>
+                </tr>
+                <tr *ngIf="rule.fix && showChecksFixes">
+                  <th class="medium-font">Fix</th>
+                  <td>
+                      <div class="bg-whitesmoke border p-1 line-break">
+                        <code>{{rule.fix}}</code>
+                      </div>
+                  </td>
+                </tr>
+                <tr *ngIf="rule.fix_text && showChecksFixes">
+                  <th class="medium-font">Fix Text</th>
+                  <td>
+                      <div class="bg-whitesmoke border p-1 line-break mb-2">
+                        <code>{{rule.fix_text}}</code>
+                      </div>
+                  </td>
+                </tr>
+              </table>
+            </mat-card-content>
+          </mat-card>
+        </mat-list-item>
+        <mat-list-item *ngIf="(stig.rules | multiFieldFilter:searchText:ruleFilters).length === 0" empty>No items match search</mat-list-item>
+      </mat-list>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+<ng-template #stigList>
+  <div class="container mt-5">
+    <mat-card class="w-100">
+      <mat-card-title class="theme-primary">
+        STIGs
+      </mat-card-title>
+      <mat-card-content class="p-0">
+        <app-data-tables [paginate]="true"
+                         [defaultPagination]="50"
+                         [pageSizeOptions]="[50, 100, 200, 1000, 2000]"
+                         [items]="stigs"
+                         [loading]="loading"
+                         [placeholder]="'stigs'"
+                         [endpoint]="'stigs'"
+                         [displayedColumns]="['identifier', 'version', 'release_info']"></app-data-tables>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>
+<ng-template #loadingSpinner>
+  <mat-card-content>
+    <mat-progress-spinner mode="indeterminate" color="accent" diameter="100"></mat-progress-spinner>
+  </mat-card-content>
+</ng-template>

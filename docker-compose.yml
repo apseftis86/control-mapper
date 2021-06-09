@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    build: ./frontend/
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8000:80
+  api:
+    build: ./controlmapper/
+    container_name: django
+    hostname: django
+    command: >
+      ./wait-for-it.sh db:5432
+      -- bash -c
+      "python manage.py collectstatic --noinput &&
+       python manage.py makemigrations --noinput &&
+       python manage.py migrate --noinput &&
+       gunicorn -b 0.0.0.0:8000 controlmapper.wsgi"
+    volumes:
+      - ./wait-for-it.sh:/app/wait-for-it.sh
+      - ./controlmapper:/app
+    depends_on:
+      - db
+  db:
+    image: postgres:13.3-alpine
+    container_name: db
+    hostname: db
+    volumes:
+      - ./.db_data:/var/lib/postgresql/data
+      - ./controlmapper/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    environment:
+      - POSTGRES_DB=controlmap
+      - POSTGRES_USER=mapuser
+      - POSTGRES_PASSWORD=GOmap2021!!
+  # must include celery info in the __init__.py file of ./project_root/project
+  celery:
+    build: ./controlmapper/
+    container_name: celery
+    hostname: celery
+    command: >
+      ./wait-for-it.sh rabbit:5672
+      -- bash -c
+      "DJANGO_READ_DOT_ENV_FILE=1 celery -A controlmapper worker -l info  --logfile=/var/log/celery/celery.log --without-gossip --without-mingle"
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./wait-for-it.sh:/app/wait-for-it.sh
+      - ./logs/celery/:/var/log/celery/
+      - ./controlmapper:/app
+    environment:
+      - DB_HOST=db
+      - DB_NAME=controlmap
+      - DB_USER=mapuser
+      - DB_PASS=GOmap2021!!
+    depends_on:
+      - db
+      - rabbit
+      - api
+  rabbit:
+    image: rabbitmq:3.8-management
+    container_name: rabbit
+    hostname: rabbit
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=GOmap2021!!
+      - RABBITMQ_DEFAULT_VHOST=/
+    ports:
+      - "5682:5672"
+      - "15682:15672"

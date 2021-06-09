@@ -1,0 +1,49 @@
+.status-column {
+  max-width: 40px;
+}
+.my-drop-zone {
+  margin-left: auto;
+  margin-right: auto;
+  border: dotted 2px lightgray;
+  height: 150px;
+  width: 150px;
+  border-radius: 3px;
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.pane {
+  max-height: 500px !important;
+  overflow-y: scroll;
+  width: 100%;
+  display: block;
+}
+.nv-file-over {
+  border: dotted 2px green;
+}
+/* Default class applied to drop zones on over */
+td {
+  vertical-align: middle;
+}
+#fileTable {
+  min-width: 600px;
+}
+.hidden-input {
+  visibility: hidden;
+  position: absolute;
+  overflow-y: hidden;
+  width: 0;
+  height:0;
+  border:none;
+  margin:0;
+  padding:0
+}
+.mat-icon-button {
+  margin: 0 5px !important;
+  &:hover {
+    transform: scale(1.1);
+  }
+}

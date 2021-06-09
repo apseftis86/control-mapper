@@ -1,0 +1,82 @@
+<mat-card class="mat-elevation-z2 mt-4">
+  <mat-card-title class="theme-primary d-flex">
+    {{importCardTitle}}
+  </mat-card-title>
+  <mat-card-content>
+    <div class="d-flex">
+      <h5>File Upload</h5>
+      <span class="flex-spacer"></span>
+      <span>Queue length: {{ queueLength > 0 ? queueLength : '0' }}</span>
+    </div>
+    <!-- import module for scans -->
+    <div class="row mt-2 align-items-start">
+      <div class="d-flex justify-content-center flex-column flex-wrap col-md-3 col-sm-12 mb-sm-3 mb-md-0">
+        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+             [uploader]="fileUploader" (onFileDrop)="fileAccepted()" class="my-drop-zone text-center">
+          <mat-icon class="text-primary icon-larger mb-2">cloud_upload</mat-icon>
+          <h6 class="font-italic">Drag File(s) Here</h6>
+        </div>
+        <button (click)="dataImport.click()" class="btn btn-secondary btn-sm m-auto">Choose Files</button>
+        <span class="hidden-input">
+              <input type="file" #dataImport ng2FileSelect [uploader]="fileUploader" multiple />
+            </span>
+      </div>
+      <div class="col-md-8 offset-md-1 col-sm-12">
+        <div class="mb-3 pane">
+          <table class="table table-striped">
+            <thead class="text-center">
+            <tr>
+              <th class="w-50 text-left">Name</th>
+              <th>Status</th>
+              <th class="w-25">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of fileUploader.queue" class="text-center">
+              <td class="text-left">{{ item?.file?.name }}</td>
+              <td class="text-center">
+                      <span *ngIf="item.progress && !item.isSuccess">
+                        <mat-progress-spinner class="mx-auto" color="primary" diameter="30" mode="indeterminate"></mat-progress-spinner>
+                      </span>
+                <mat-icon *ngIf="item.isSuccess" class="text-success">check</mat-icon>
+                <mat-icon *ngIf="item.isCancel" class="text-warning">block</mat-icon>
+                <mat-icon *ngIf="item.isError" class="text-danger">error</mat-icon>
+              </td>
+              <td nowrap class="d-flex justify-content-around">
+                <button mat-icon-button class="mat-elevation-z1"
+                        [hidden]="item.isReady || item.isUploading || item.isSuccess">
+                  <mat-icon class="text-success" (click)="item.upload();">cloud_upload</mat-icon>
+                </button>
+                <button mat-icon-button class="mat-elevation-z1" [hidden]="item.isSuccess">
+                  <mat-icon class="text-warning" (click)="item.cancel()">block</mat-icon>
+                </button>
+                <button mat-icon-button class="mat-elevation-z1">
+                  <mat-icon class="text-danger" (click)="item.remove(); removeFromQueue()">clear</mat-icon>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <mat-divider *ngIf="fileUploader.queue.length >= 2"></mat-divider>
+        <div [class.hide]="fileUploader.queue.length < 2">
+          <div class="w-50 my-2">Queue progress:
+            <mat-progress-bar [value]="fileUploader.progress"></mat-progress-bar>
+          </div>
+          <button type="button" class="btn btn-sm btn-success mx-1" (click)="fileUploader.uploadAll()"
+                  [hidden]="!fileUploader.getNotUploadedItems().length">Upload all
+
+          </button>
+          <button type="button" class="btn btn-sm  btn-warning mx-1" (click)="fileUploader.cancelAll()"
+                  [hidden]="!fileUploader.isUploading">
+            Cancel all
+          </button>
+          <button type="button" class="btn btn-sm  btn-danger mx-1" (click)="fileUploader.clearQueue(); removeFromQueue(true)"
+                  [hidden]="!fileUploader.queue.length">
+            Remove all
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

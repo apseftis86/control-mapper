@@ -1,0 +1,12 @@
+<span (click)="selectRef()"
+      class="badge badge-primary badge-pill m-1
+      mat-elevation-z1 font-weight-normal
+      references clickable">
+  <ng-container [ngSwitch]="reference.name">
+    <ng-container *ngSwitchCase="'CCI'">{{reference.text}}</ng-container>
+    <ng-container *ngSwitchCase="'800-53'">{{reference.name}} r{{reference.revision}} | {{reference.text}}</ng-container>
+    <ng-container *ngSwitchDefault>
+      {{reference.name}} | {{reference.text}}
+    </ng-container>
+  </ng-container>
+</span>

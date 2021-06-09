@@ -1,0 +1,28 @@
+:host {
+  min-width: 15%;
+  max-width: 35%;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 99999;
+  float: right;
+}
+.icon-div {
+  display: flex;
+  justify-content: center;
+  color: white;
+  height: inherit;
+  min-height: 50px;
+  width: 50px;
+}
+.toast {
+  max-width: unset !important;
+  font-size: 16px !important;
+}
+.toast:not(:last-child) {
+  margin-bottom: 0.05rem;
+}
+.toast-body.no-header {
+  display: flex;
+  padding: 0 !important;
+}

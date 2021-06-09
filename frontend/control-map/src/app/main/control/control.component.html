@@ -1,0 +1,15 @@
+<mat-card class="mt-5">
+  <mat-card-title class="theme-primary">
+    NIST Controls 800-53 revision 4
+  </mat-card-title>
+  <mat-card-content>
+    <app-data-tables [paginate]="true"
+                     [defaultPagination]="25"
+                     [pageSizeOptions]="[25, 50, 100, 200, 1000]"
+                     [items]="controls"
+                     [loading]="loading"
+                     [placeholder]="'Controls'"
+                     [endpoint]="'controls'"
+                     [displayedColumns]="['number', 'family', 'title', 'description']"></app-data-tables>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,24 @@
+<mat-card class="mt-5">
+  <mat-card-title class="theme-primary d-flex justify-content-between">
+    <span>CCIS</span>
+    <div class="w-15 d-flex">
+      <span class="medium-font mr-2">Nist: </span>
+      <mat-select placeholder="Revision" [(ngModel)]="nistRevision">
+        <mat-option [value]="3">rev. 3</mat-option>
+        <mat-option [value]="4">rev. 4</mat-option>
+        <mat-option [value]="5">rev. 5</mat-option>
+      </mat-select>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <app-data-tables [paginate]="true"
+                     [defaultPagination]="25"
+                     [pageSizeOptions]="[25, 50, 100, 200, 1000]"
+                     [items]="ccis"
+                     [revision]="nistRevision"
+                     [loading]="loading"
+                     [placeholder]="'CCIs'"
+                     [endpoint]="'ccis'"
+                     [displayedColumns]="['name', 'definition', 'controls']"></app-data-tables>
+  </mat-card-content>
+</mat-card>

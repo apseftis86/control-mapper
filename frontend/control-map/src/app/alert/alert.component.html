@@ -1,0 +1,12 @@
+<div *ngIf="message" [@alertExists]="alertShow ? 'show' : 'hide'"
+     (@alertExists.start)="onAnimate($event)"
+     (@alertExists.done)="onAnimate($event)">
+  <div class="toast fade show">
+  <div class="toast-body no-header">
+      <span class="icon-div mr-2" [ngClass]="alertSettings[message.type].color">
+        <mat-icon class="my-auto">{{alertSettings[message.type].icon}}</mat-icon>
+      </span>
+    <span class="my-auto p-1 ">{{message.text}}</span>
+  </div>
+</div>
+</div>
