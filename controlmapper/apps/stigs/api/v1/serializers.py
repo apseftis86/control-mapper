@@ -119,7 +119,7 @@ class BenchmarkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = benchmark_models.Benchmark
-        fields = ('id', 'identifier', 'title', 'version', 'release_info')
+        fields = ('id', 'identifier', 'title', 'version', 'release_info', 'upload_completed')
 
     @staticmethod
     def get_identifier(obj):

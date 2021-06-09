@@ -1,3 +1,4 @@
+venv
 .idea
 .db_data
 /controlmapper/apps/rmf/fixtures/
@@ -5,5 +6,3 @@
 *.pyc
 media/
 static/
-/controlmapper/apps/rmf/migrations/*.py
-/controlmapper/apps/stigs/migrations/*.py

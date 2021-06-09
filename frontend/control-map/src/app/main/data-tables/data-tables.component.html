@@ -12,12 +12,12 @@
     </ng-container>
     <ng-container matColumnDef="identifier">
       <ng-container [ngSwitch]="endpoint">
-        <ng-container *ngSwitchCase="'benchmarks'">
+        <ng-container *ngSwitchCase="'stigs'">
           <mat-header-cell class="fw-40 pr-1" *matHeaderCellDef mat-sort-header> Identifier </mat-header-cell>
           <mat-cell *matCellDef="let element" class="fw-40 pr-1">
             {{element.identifier}}
             <ng-container *ngIf="!element.upload_completed">
-              <mat-icon>schedule</mat-icon>
+              <mat-icon>error</mat-icon>
             </ng-container>
           </mat-cell>
         </ng-container>
