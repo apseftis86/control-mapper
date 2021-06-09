@@ -31,28 +31,25 @@ def update_benchmark(benchmark_id, data):
                         benchmark.save()
     os.unlink(data)
 
-
 @shared_task
 def save_benchmark(benchmark_id,  data):
+    def save_info(benchmark_id, benchmark_data):
+        with transaction.atomic():
+            benchmark = benchmark_models.Benchmark.objects.select_for_update().get(id=benchmark_id)
+            logger.info('Saving benchmark')
+            benchmark.save_item(benchmark_data)
+            benchmark.save()
+        return
     benchmark_data = etree.parse(data).getroot()
     tag = etree.QName(benchmark_data).localname
     if tag == 'Benchmark':
-        with transaction.atomic():
-            benchmark = benchmark_models.Benchmark.objects.select_for_update().get(id=benchmark_id)
-            print('Creating benchmark')
-            logger.info('Saving benchmark')
-            benchmark.save_item(benchmark_data)
+        save_info(benchmark_id, benchmark_data)
     else:
         for component in benchmark_data.getchildren():
             for child in component.getchildren():
                 tag = etree.QName(child).localname
                 if tag == 'Benchmark':
-                    with transaction.atomic():
-                        benchmark = benchmark_models.Benchmark.objects.select_for_update().get(id=benchmark_id)
-                        logger.info('Saving benchmark')
-                        benchmark.save_item(child)
-                        benchmark.save()
+                    save_info(benchmark_id, benchmark_data)
     os.unlink(data)
     return
-
 
