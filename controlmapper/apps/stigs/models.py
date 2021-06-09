@@ -36,6 +36,7 @@ class Benchmark(CustomModel):
     description = models.TextField()
     version = models.CharField(max_length=100, null=True)
     status = models.CharField(max_length=100, null=True)
+    upload_completed = models.BooleanField(default=False)
 
     def __str__(self):
         match = re.search(r'\_V(\d*?)R(\d*?)\_', str(self.name))
