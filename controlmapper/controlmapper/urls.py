@@ -20,8 +20,6 @@ from apps.stigs.api.routes import api_router as stig_router
 from rest_framework_jwt.views import refresh_jwt_token
 from apps.accounts.util_view import ObtainJWTView
 from apps.accounts import views
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,5 +29,3 @@ urlpatterns = [
     path('api/v1/', include(rmf_router.urls)),
     path('api/v1/', include(stig_router.urls)),
 ]
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

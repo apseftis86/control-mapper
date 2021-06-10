@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import datetime
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 DJANGO_ALLOWED_HOSTS='*'
@@ -59,9 +60,9 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:4200',
 ]
 STATIC_URL = '/static/'
-STATIC_ROOT = "/app/static/"
+STATIC_ROOT = '/app/static'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/app/media/'
+MEDIA_ROOT = '/app/media'
 STATICFILES_DIRS = []
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = [

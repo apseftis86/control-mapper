@@ -1,6 +1,6 @@
 FROM node:lts-alpine AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY control-map/package.json ./
 RUN npm install
 COPY control-map .
 RUN npm run build

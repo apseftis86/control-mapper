@@ -92,11 +92,10 @@ class NistControlListSerializer(serializers.ModelSerializer):
 class NistControlSerializer(serializers.ModelSerializer):
     statement = NistStatementSerializer(required=False, read_only=True)
     description = serializers.SerializerMethodField(required=False)
-    control = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = rmf_models.NistControl
-        fields = ('id', 'family', 'number', 'title', 'control', 'description', 'statement',
+        fields = ('id', 'family', 'number', 'title', 'description', 'statement',
                   # 'confidentiality_threshold',  'integrity_threshold',  'availability_threshold',
                   )
 
@@ -109,12 +108,6 @@ class NistControlSerializer(serializers.ModelSerializer):
         except AttributeError:
             return None
 
-    @staticmethod
-    def get_control(obj):
-        if obj.revision == 5:
-            return obj.statement.description
-        else:
-            return obj.control
 
 
 
