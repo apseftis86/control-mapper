@@ -20,8 +20,8 @@ services:
     command: >
       ./wait-for-it.sh db:5432 -t 60
       -- bash -c
-      "python manage.py collectstatic --noinput &&
-       python manage.py migrate --noinput &&
+      "python manage.py collectstatic --noinput --settings=controlmapper.prod_settings &&
+       python manage.py migrate --noinput --settings=controlmapper.prod_settings &&
        gunicorn -b 0.0.0.0:8000 controlmapper.wsgi"
     volumes:
       - ./wait-for-it.sh:/app/wait-for-it.sh
@@ -49,7 +49,7 @@ services:
     command: >
       ./wait-for-it.sh rabbit:5672
       -- bash -c
-      "DJANGO_SETTINGS_MODULE=config.prod_settings celery -A controlmapper worker -l info  --logfile=/var/log/celery/celery.log --without-gossip --without-mingle"
+      "DJANGO_SETTINGS_MODULE=controlmapper.prod_settings celery -A controlmapper worker -l info  --logfile=/var/log/celery/celery.log --without-gossip --without-mingle"
     stdin_open: true
     tty: true
     volumes:
