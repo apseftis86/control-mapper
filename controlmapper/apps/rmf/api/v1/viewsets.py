@@ -9,7 +9,7 @@ from django.db.models import Q
 from lxml import etree
 import json
 from django.conf import settings
-
+import logging
 
 class ControlCorrelationIdentifierViewSet(viewsets.ModelViewSet):
     model = rmf_models.ControlCorrelationIdentifier
@@ -146,7 +146,8 @@ class NistControlViewSet(viewsets.ReadOnlyModelViewSet):
     # will show only the enhancements of a nist control
     @action(methods=['get'], detail=True)
     def enhancements(self, request, **kwargs):
-        print(settings.BASE_DIR)
+        logger = logging.getLogger(__name__)
+        logger.info('Getting enhancements')
         instance = self.get_object()
         return Response(rmf_serializer.NistControlSerializer(instance.enhancements.all(), many=True).data)
 

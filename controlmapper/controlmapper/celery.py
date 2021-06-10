@@ -1,15 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
-from celery import shared_task
+from dotenv import load_dotenv, find_dotenv
 
-# set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'controlmapper.settings')
+load_dotenv(find_dotenv())
 
-broker_url = 'amqp://admin:GOmap2021!!@rabbit:5672//'
-
-
-app = Celery('controlmapper', broker=broker_url)
+app = Celery('controlmapper', broker=os.getenv('BROKER_URL'), database=os.getenv('DATABASE_URL'))
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.

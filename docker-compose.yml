@@ -6,7 +6,7 @@ services:
     container_name: db
     hostname: db
     volumes:
-      - ./.db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
       - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
     environment:
       - POSTGRES_DB=controlmap
@@ -27,6 +27,7 @@ services:
       - ./wait-for-it.sh:/app/wait-for-it.sh
       - ./controlmapper:/app
       - static_files:/app/static
+      - api_log:/app/logs/django
   rabbit:
     image: rabbitmq:3.8-management
     container_name: rabbit
@@ -48,18 +49,13 @@ services:
     command: >
       ./wait-for-it.sh rabbit:5672
       -- bash -c
-      "DJANGO_READ_DOT_ENV_FILE=1 celery -A controlmapper worker -l info  --logfile=/var/log/celery/celery.log --without-gossip --without-mingle"
+      "DJANGO_SETTINGS_MODULE=config.prod_settings celery -A controlmapper worker -l info  --logfile=/var/log/celery/celery.log --without-gossip --without-mingle"
     stdin_open: true
     tty: true
     volumes:
       - ./wait-for-it.sh:/app/wait-for-it.sh
-      - ./logs/celery/:/var/log/celery/
+      - celery_log:/var/log/celery/
       - ./controlmapper:/app
-    environment:
-      - DB_HOST=db
-      - DB_NAME=controlmap
-      - DB_USER=mapuser
-      - DB_PASS=GOmap2021!!
     depends_on:
       - rabbit
   frontend:
@@ -76,3 +72,7 @@ services:
 
 volumes:
   static_files:
+  db_data:
+  celery_log:
+  api_log:
+  frontend_log:

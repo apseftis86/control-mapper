@@ -10,75 +10,39 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from pathlib import Path
 import datetime
+from dotenv import load_dotenv, find_dotenv
+import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+LOGGING_CONFIG = None
+
+load_dotenv(find_dotenv())
+SECRET_KEY = os.environ.get("SECRET_KEY")
+DEBUG = True
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DEV_DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
+    }
+}
+STATIC_URL = '/static/'
+STATIC_ROOT = '/opt/control-mapper/controlmapper/static'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/opt/control-mapper/controlmapper/media'
 DJANGO_ALLOWED_HOSTS='*'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=p1+miqwxcejxx$ioc(v%v*p89ae-lbi)zgtg&htiddzm-l@+8'
-# CELERY_RESULT_BACKEND = 'amqp://admin:GOmap2021!!@rabbit:5672//'
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'access-control-allow-headers',
-    'access-control-expose-headers',
-    'content-type',
-    'content-disposition',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
-CORS_EXPOSE_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'access-control-allow-headers',
-    'access-control-expose-headers',
-    'content-type',
-    'content-disposition',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:4200',
-]
-STATIC_URL = '/static/'
-STATIC_ROOT = '/app/static'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = '/app/media'
 STATICFILES_DIRS = []
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'controlmap',
-        'USER': 'mapuser',
-        'PASSWORD': 'GOmap2021!!',
-        'HOST': 'db',
-        'PORT': '5432',
-    }
-}
 # Application definition
 
 INSTALLED_APPS = [
