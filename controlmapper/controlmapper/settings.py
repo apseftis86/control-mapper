@@ -33,27 +33,33 @@ load_dotenv(find_dotenv())
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = True
 
-LOGGING_CONFIG = None
-
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'file': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': './logs/django/info.log'
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/usr/local/var/logs/django/info.log'
         }
     },
     'loggers': {
-        'django': {
+        'django.request': {
             'handlers': ['file'],
             'level': 'INFO',
             'propagate': True
         },
     }
 }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
