@@ -49,7 +49,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/usr/local/var/logs/django/info.log'
+            'filename': './logs/info.log'
         }
     },
     'loggers': {
