@@ -3,7 +3,6 @@ import {BehaviorSubject} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialogConfig} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {Clipboard} from '@angular/cdk/clipboard';
 import {ApiService} from './api.service';
 
 @Injectable()
@@ -24,7 +23,6 @@ export class UtilityService {
     public snackBar: MatSnackBar,
     private apiService: ApiService,
     private router: Router,
-    private clipboard: Clipboard,
   ) {
   }
   setBreadcrumbs(message: any) {
@@ -148,8 +146,6 @@ export class UtilityService {
         } else {
           data += `\n${item}\n`;
         }
-        this.clipboard.copy(data);
-        // this.openSnackbar({action: 'copied'}, 750, 'bottom');
       });
     });
     // this.closeSnackbar();

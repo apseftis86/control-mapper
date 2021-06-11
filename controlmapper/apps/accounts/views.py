@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.contrib.auth.models import User
 from rest_framework.response import Response
 from .serializers import RegistrationSerializer, UserDetailSerializer, UserSerializer
 from rest_framework import viewsets
@@ -8,6 +7,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from .models import CustomUser
 from rest_framework import exceptions
+import logging
+
 
 class RegistrationView(viewsets.ViewSet):
     model = None
@@ -16,6 +17,7 @@ class RegistrationView(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
+        logger = logging.getLogger('user')
         request.data['username'] = request.data['username'].lower()
         user_data = self.serializer_class(data=request.data)
         if user_data.is_valid(raise_exception=True):
@@ -23,11 +25,14 @@ class RegistrationView(viewsets.ViewSet):
             new_user = CustomUser.objects.create_user(**user)
             new_user.is_active = False
             new_user.save()
+            logger.info(f'New user created: {new_user.get_name()}')
             return Response('Registration complete! Once your account is activated you will be able to sign in.')
         else:
+            logger.error(f"Error while creating user {request.data['username']}")
             raise exceptions.NotAcceptable('User could not be created')
 
-class LoginView():
+
+class LoginView:
     pass
 
 

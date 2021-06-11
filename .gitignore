@@ -3,6 +3,8 @@ venv
 .db_data
 /controlmapper/apps/rmf/fixtures/
 /frontend/control-map/node_modules/
+/frontend/control-map/package*.json
 *.pyc
 media/
 static/
+/controlmapper/logs/

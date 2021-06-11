@@ -27,7 +27,7 @@ services:
       - ./wait-for-it.sh:/app/wait-for-it.sh
       - ./controlmapper:/app
       - static_files:/app/static
-      - api_log:/app/logs/django
+      - api_log:/app/logs
   rabbit:
     image: rabbitmq:3.8-management
     container_name: rabbit

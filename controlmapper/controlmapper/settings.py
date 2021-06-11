@@ -28,13 +28,13 @@ import datetime
 from dotenv import load_dotenv, find_dotenv
 import os
 
-
 load_dotenv(find_dotenv())
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = True
 
 LOGGING = {
     'version': 1,
+    # 'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
@@ -48,13 +48,25 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': './logs/info.log'
+            'class': 'logging.FileHandler',
+            'filename': './logs/info.log',
+            'formatter': 'verbose',
+        },
+        'user': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './logs/user.log',
+            'formatter': 'verbose',
         }
     },
     'loggers': {
         'django.request': {
             'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'user': {
+            'handlers': ['user'],
             'level': 'INFO',
             'propagate': True
         },
