@@ -22,10 +22,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {HomeService} from './_services/home.service';
 import {AuthService} from './_services/auth.service';
 import {MatCardModule} from '@angular/material/card';
-import {MainModule} from '../main/main.module';
-import {MainRoutingModule} from '../main/main-routing.module';
-import {ImportModule} from '../import/import.module';
-import {ImportRoutingModule} from '../import/import-routing.module';
 import { AuthComponent } from './auth.component';
 
 

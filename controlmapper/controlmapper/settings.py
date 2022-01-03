@@ -29,15 +29,20 @@ from dotenv import load_dotenv, find_dotenv
 import os
 
 load_dotenv(find_dotenv())
-SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = True
+SECRET_KEY = os.getenv("SECRET_KEY")
+CELERY_BROKER_URL = None
+CELERY_DB_URL = None
 
 LOGGING = {
     'version': 1,
-    # 'disable_existing_loggers': False,
+    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'basic': {
+            'format': '{levelname} {asctime} {message}',
             'style': '{',
         },
         'simple': {
@@ -56,7 +61,13 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': './logs/user.log',
-            'formatter': 'verbose',
+            'formatter': 'basic',
+        },
+        'stig': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logs/stig.log',
+            'formatter': 'basic',
         }
     },
     'loggers': {
@@ -70,23 +81,17 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True
         },
+        'stig': {
+            'handlers': ['stig'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
     }
 }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("DB_NAME"),
-        'USER': os.getenv("DB_USER"),
-        'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': os.getenv("DEV_DB_HOST"),
-        'PORT': os.getenv("DB_PORT"),
-    }
-}
+
 STATIC_URL = '/static/'
-STATIC_ROOT = '/opt/control-mapper/controlmapper/static'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/opt/control-mapper/controlmapper/media'
-DJANGO_ALLOWED_HOSTS='*'
+DJANGO_ALLOWED_HOSTS = '*'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/

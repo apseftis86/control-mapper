@@ -4,7 +4,7 @@ from django.db import transaction
 from . import models as benchmark_models
 from lxml import etree
 import os
-logger = get_task_logger(__name__)
+logger = get_task_logger('stig')
 
 
 # I am not sure I chose the best way to do this.  When looking at some projects I saw that they were
@@ -31,6 +31,7 @@ def update_benchmark(benchmark_id, data):
                         benchmark.save()
     os.unlink(data)
 
+
 @shared_task
 def save_benchmark(benchmark_id,  data):
     def save_info(benchmark_id, benchmark_data):
@@ -40,7 +41,7 @@ def save_benchmark(benchmark_id,  data):
             benchmark.identifier = benchmark_data.get('id')
             benchmark.save()
             benchmark.save_item(benchmark_data)
-            benchmark.upload_completed = True
+            benchmark.upload_status = 'C'
             benchmark.save()
         return
     benchmark_data = etree.parse(data).getroot()

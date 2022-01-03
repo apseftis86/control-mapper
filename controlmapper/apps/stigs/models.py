@@ -36,7 +36,8 @@ class Benchmark(CustomModel):
     description = models.TextField()
     version = models.CharField(max_length=100, null=True)
     status = models.CharField(max_length=100, null=True)
-    upload_completed = models.BooleanField(default=False)
+    upload_status = models.CharField(max_length=20,
+                                     choices=(('Uploading', 'U'), ('Completed', 'C'), ('Error', 'E')), default='U')
 
     def __str__(self):
         match = re.search(r'\_V(\d*?)R(\d*?)\_', str(self.name))
@@ -92,17 +93,8 @@ class Benchmark(CustomModel):
         for profile in profiles:
             Profile.objects.save_item(profile, identifier=profile.get('id'), benchmark=self)
 
-    def update_item(self, element, **kwargs):
-        for child in element.getchildren():
-            tag = etree.QName(child).localname
-            if tag == 'Group':
-                group = Group.objects.filter(benchmark=self, group_id=child.get('id')).first()
-                if group is not None:
-                    group.update_item(child)
-
 
 class BenchmarkPlainText(CustomModel):
-    
 
     identifier = models.CharField(max_length=100)
     text = models.TextField(null=True)
@@ -111,7 +103,6 @@ class BenchmarkPlainText(CustomModel):
 
 # this is the profile from the STIG this will not be the profile that is mapped to the SSP benchmark for now.
 class Profile(CustomModel):
-    
 
     identifier = models.CharField(max_length=255)
     title = models.TextField(null=True, blank=True)
@@ -137,29 +128,8 @@ class Profile(CustomModel):
                     setattr(self, tag, text)
                 self.save()
 
-    def update_item(self, element, **kwargs):
-        for child in element.getchildren():
-            tag = etree.QName(child).localname
-            if tag == 'select':
-                select, created = ProfileSelects.objects.get_or_create(idref=child.get('idref'), profile=self)
-                if created:
-                    ProfileSelects.objects.save_item(child, profile=self)
-            else:
-                if child.getchildren() is None:
-                    setattr(self, tag, child.text)
-                else:
-                    text = child.text
-                    # descriptions and other element can have <sub> or even <html> elements
-                    # we are going to ignore those and only take in the text
-                    for sub in child.getchildren():
-                        text += sub.text
-                        text += sub.tail
-                    setattr(self, tag, text)
-                self.save()
-
 
 class ProfileSelects(CustomModel):
-    
 
     idref = models.CharField(max_length=100)
     selected = models.BooleanField(default=True)
@@ -193,7 +163,6 @@ type_choices = [
 
 
 class Value(CustomModel):
-    
 
     identifier = models.CharField(max_length=255)
     title = models.TextField(blank=True)
@@ -229,7 +198,6 @@ class Value(CustomModel):
 
 
 class ValueValues(CustomModel):
-    
 
     selector = models.CharField(max_length=255, null=True)
     value_text = models.TextField()
@@ -237,7 +205,6 @@ class ValueValues(CustomModel):
 
 
 class Group(CustomModel):
-    
 
     # when doing a check from the report item we will want to check the 'GROUP-ID' area first then
     # check if they have a 'Group-ID'
@@ -247,16 +214,6 @@ class Group(CustomModel):
     description = models.TextField()
     benchmark = models.ForeignKey(Benchmark, related_name='groups', on_delete=models.CASCADE)
     parent_group = models.ForeignKey('self', related_name='groups', null=True, on_delete=models.CASCADE)
-
-    def update_item(self, element):
-        print(f"updating group {self.pk}")
-        for child in element.getchildren():
-            tag = etree.QName(child).localname
-            print(tag)
-            if tag == 'version':
-                print(child.text)
-                self.version = child.text
-                self.save()
 
     def save_item(self, element, **kwargs):
         self.save()
@@ -284,7 +241,6 @@ class Group(CustomModel):
 
 
 class Rule(CustomModel):
-    
 
     rule_id = models.CharField(max_length=255, db_index=True)
     version = models.CharField(max_length=100, null=True)
@@ -315,7 +271,7 @@ class Rule(CustomModel):
                 self.save()
                 if tag == 'ident':
                     if 'CCI' in child.text:
-                        cci_obj, created = rmf_models.ControlCorrelationIdentifier.objects.get_or_create(name=child.text)
+                        cci_obj = rmf_models.ControlCorrelationIdentifier.objects.filter(name=child.text).first()
                         if cci_obj:
                             self.ccis.add(cci_obj)
                             self.save()
@@ -333,7 +289,6 @@ class Rule(CustomModel):
 
 
 class Check(CustomModel):
-    
 
     system = models.CharField(max_length=255)
     check_content = models.TextField(null=True, blank=True)
@@ -350,7 +305,6 @@ class Check(CustomModel):
 
 
 class Fix(CustomModel):
-    
 
     identifier = models.CharField(max_length=255)
     text = models.TextField()
@@ -369,7 +323,6 @@ class Fix(CustomModel):
 
 
 class FixText(CustomModel):
-    
 
     fixref = models.CharField(max_length=255)
     text = models.TextField()

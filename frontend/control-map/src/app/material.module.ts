@@ -79,6 +79,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     // Material Imports
     MatToolbarModule,
     MatIconModule,
+    MatInputModule,
     MatButtonModule,
     MatExpansionModule,
     MatCheckboxModule,

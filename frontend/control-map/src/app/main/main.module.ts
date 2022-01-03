@@ -8,7 +8,6 @@ import {MultipleFieldFilterPipe} from './_filters/multiple-field-filter.pipe';
 import {RulePipe} from './_filters/rule.pipe';
 import {CciFilterPipe} from './_filters/cci-filter.pipe';
 import {ApiService} from './_services/api.service';
-import {UtilityService} from './_services/utility.service';
 import {FindingFilterPipe} from './_filters/finding.pipe';
 import {FilterPipe} from './_filters/filter.pipe';
 import {FormsModule} from '@angular/forms';
@@ -39,8 +38,13 @@ import {MainComponent} from './main.component';
     HttpClientModule,
     MaterialModule,
   ],
-  providers: [ApiService, UtilityService,
-    FindingFilterPipe, FilterPipe, CciFilterPipe, MultipleFieldFilterPipe],
+  providers: [
+    ApiService,
+    FindingFilterPipe,
+    FilterPipe,
+    CciFilterPipe,
+    MultipleFieldFilterPipe
+  ],
   exports: [],
   bootstrap: [MainComponent]
 })

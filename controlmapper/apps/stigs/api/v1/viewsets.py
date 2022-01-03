@@ -7,7 +7,7 @@ from . import serializers as stig_serializer
 from apps.stigs import tasks
 from django.core.files.storage import FileSystemStorage
 import os
-from controlmapper.settings import MEDIA_ROOT
+from django.conf import settings
 
 
 # currently application accepts xml and nessus files
@@ -34,12 +34,12 @@ class BenchmarkViewSet(STIGViewSet):
             return Response('Error', status=400)
         if uploaded_file and allowed_file(uploaded_file.name):
             fs = FileSystemStorage()
-            file_path = os.path.join(MEDIA_ROOT, uploaded_file.name)
+            file_path = os.path.join(settings.MEDIA_ROOT, uploaded_file.name)
             fs.save(file_path, uploaded_file)
             existing_benchmark = benchmark_models.Benchmark.objects.filter(name=uploaded_file.name).first()
             if existing_benchmark is not None:
-                tasks.update_benchmark.delay(existing_benchmark.id, file_path)
-                return Response('Benchmark successfully updated', status=200)
+                # tasks.update_benchmark.delay(existing_benchmark.id, file_path)
+                return Response('Benchmark already exists', status=409)
             else:
                 benchmark = benchmark_models.Benchmark.objects.create(name=uploaded_file.name)
                 if benchmark:

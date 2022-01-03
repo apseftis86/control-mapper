@@ -1,11 +1,6 @@
 from .settings import *
-from dotenv import load_dotenv, find_dotenv
 import os
 
-LOGGING_CONFIG = None
-
-load_dotenv(find_dotenv())
-SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 DATABASES = {
     'default': {
@@ -18,7 +13,9 @@ DATABASES = {
     }
 }
 
-STATIC_URL = '/static/'
-STATIC_ROOT = '/app/static'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = '/app/media'
+STATIC_ROOT = '/app/static/'
+MEDIA_ROOT = '/app/media/'
+
+# CELERY_BROKER_URL = os.getenv('BROKER_URL')
+# CELERY_DB_URL = os.getenv('DB_URL')
+print('Im prod', CELERY_BROKER_URL)
