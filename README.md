@@ -1,5 +1,5 @@
 # Benchmark Control Mapper
-#### Video Demo:  <URL HERE>
+#### Video Demo: https://youtu.be/Q0HuGALv-9o
 #### Description:
 
 Security Control Assessors (SCAs) are responsible for the hardening and security of systems.
